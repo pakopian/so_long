@@ -12,23 +12,20 @@
 
 #include "map.h"
 
+#include "game.h"
+
 int	main(int argc, char **argv)
 {
-	t_map	map;
+	t_game	game;
 
 	if (argc != 2)
-	{
-		write(2, "Usage: ./so_long map.ber\n", 26);
-		return (1);
-	}
-	if (!read_map(argv[1], &map))
-		return (1);
-	if (!validate_map(&map))
-	{
-		free_map(map.data, map.height);
-		return (1);
-	}
-	ft_printf("Map OK. Size: %d x %d\n", map.width, map.height);
-	free_map(map.data, map.height);
+		return (write(2, "Error\nUsage: ./so_long map.ber\n", 32), 1);
+	init_game_struct(&game);
+	if (init_game(&game, argv[1]))
+		exit_with_error(&game, NULL);
+	render_map(&game);
+	mlx_hook(game.win, 2, 1L << 0, key_hook, &game);
+	mlx_hook(game.win, 17, 0, exit_hook, &game);
+	mlx_loop(game.mlx);
 	return (0);
 }

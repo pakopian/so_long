@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "map.h"
+#include "game.h"
 
 static int	check_rectangular(t_map *map)
 {
@@ -54,6 +55,20 @@ static int	check_walls(t_map *map)
 	return (1);
 }
 
+static void	check_element_char(t_map *map, char c, int x, int y)
+{
+	if (c == 'P')
+	{
+		map->player_count++;
+		map->player_x = x;
+		map->player_y = y;
+	}
+	else if (c == 'E')
+		map->exit_count++;
+	else if (c == 'C')
+		map->collectible_count++;
+}
+
 static void	count_elements(t_map *map)
 {
 	int		i;
@@ -70,12 +85,7 @@ static void	count_elements(t_map *map)
 		while (j < map->width)
 		{
 			c = map->data[i][j];
-			if (c == 'P')
-				map->player_count++;
-			else if (c == 'E')
-				map->exit_count++;
-			else if (c == 'C')
-				map->collectible_count++;
+			check_element_char(map, c, j, i);
 			j++;
 		}
 		i++;
@@ -92,5 +102,7 @@ int	validate_map(t_map *map)
 	if (map->player_count != 1 || map->exit_count != 1
 		|| map->collectible_count < 1)
 		return (write(2, "Error\nMap must have 1 P, 1 E, 1+ C\n", 34), 0);
+	if (!is_map_solvable(map))
+		return (write(2, "Error\nMap is not solvable\n", 27), 0);
 	return (1);
 }

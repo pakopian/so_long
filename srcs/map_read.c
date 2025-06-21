@@ -40,9 +40,16 @@ int	read_map(const char *filename, t_map *map)
 	fd = open(filename, O_RDONLY);
 	map->data = malloc(sizeof(char *) * (map->height + 1));
 	if (map->data == NULL)
+	{
+		close(fd);
 		return (write(2, "Error\nMalloc failed\n", 21), 0);
+	}
 	if (!fill_map_data(fd, map))
-		return (write(2, "Error\nInvalid characters in map\n", 32), 0);
+		return (close(fd), write(2,
+				"Error\nInvalid characters in map\n", 32), 0);
+	close(fd);
+	if (!map->data[0])
+		return (0);
 	map->width = ft_strlen(map->data[0]);
 	if (map->data[0][map->width - 1] == '\n')
 		map->width--;

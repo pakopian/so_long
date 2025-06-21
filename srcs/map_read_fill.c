@@ -43,11 +43,19 @@ int	fill_map_data(int fd, t_map *map)
 	while (line != NULL)
 	{
 		if (!line_has_only_valid_chars(line))
-			return (free(line), 0);
+		{
+			free(line);
+			while (--i >= 0)
+				free(map->data[i]);
+			free(map->data);
+			map->data = NULL;
+			return (0);
+		}
 		map->data[i] = line;
 		i++;
 		line = get_next_line(fd);
 	}
+	free(line);
 	map->data[i] = NULL;
 	close(fd);
 	return (1);

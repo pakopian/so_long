@@ -79,9 +79,6 @@ void	print_int(int n, int *res);
 void	print_unsigned(unsigned int n, int *res);
 void	print_pointer(unsigned long long pt, int *res);
 char	*get_next_line(int fd);
-char	*ft_strchr(const char *s, int c);
-char	*ft_strdup(const char *src);
 size_t	ft_strlcpy(char *dst, const char *src, size_t size);
-char	*ft_strjoin(char const *s1, char const *s2);
 
 #endif

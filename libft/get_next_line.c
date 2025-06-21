@@ -93,6 +93,8 @@ char	*get_next_line(int fd)
 	static char	*saved;
 	char		*line;
 
+	if (fd == -1)
+		free(saved);
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	saved = read_and_save(fd, saved);

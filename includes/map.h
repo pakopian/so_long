@@ -26,6 +26,8 @@ typedef struct s_map
 	int		player_count;
 	int		exit_count;
 	int		collectible_count;
+	int		player_x;
+	int		player_y;
 }	t_map;
 
 int		read_map(const char *filename, t_map *map);
